@@ -2,6 +2,9 @@ import java.util.ArrayList;
 public class Room_Database {
     private ArrayList<Room> rooms;
 
+    public Room_Database() {
+        rooms = new ArrayList<Room>();
+    }
     public ArrayList<Room> getRooms() {
         return rooms;
     }
@@ -16,5 +19,11 @@ public class Room_Database {
             room = room + "\n" + "Occupied: No";
         }
         return room;
+    }
+
+    public void viewAllRooms() {
+        for (int x=0;x<rooms.size();x++) {
+            System.out.println(this.viewRoom(rooms.get(x)));
+        }
     }
 }
