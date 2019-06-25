@@ -9,6 +9,14 @@ public class Employee {
     public Employee() {
 
     }
+    public Employee(String e, String f, String l, String u, String pa, String po) {
+        employeeID = e;
+        first_name = f;
+        last_name = l;
+        username = u;
+        password = pa;
+        position = po;
+    }
 
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
