@@ -2,8 +2,17 @@ import java.util.ArrayList;
 public class Administrator {
     private Employee_Database employeeDatabase;
     private Room_Database roomDatabase;
-    public Administrator(Employee_Database d) {
+    public Administrator(Employee_Database d, Room_Database r) {
         employeeDatabase = d;
+        roomDatabase = r;
+    }
+
+    public Employee_Database getEmployeeDatabase() {
+        return employeeDatabase;
+    }
+
+    public Room_Database getRoomDatabase() {
+        return roomDatabase;
     }
 
     public void addEmployee(Employee e) {
@@ -24,5 +33,12 @@ public class Administrator {
     public Employee getEmployee(Employee e) {
         ArrayList<Employee> database = employeeDatabase.getEmployeeDatabase();
         return database.get(database.indexOf(e));
+    }
+
+    public void viewAllEmployeeInfo() {
+        employeeDatabase.viewAllInfo();
+    }
+    public void viewAllRoomInfo() {
+        roomDatabase.viewAllRooms();
     }
 }
