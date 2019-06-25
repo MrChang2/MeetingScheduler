@@ -2,6 +2,9 @@ import java.util.ArrayList;
 public class Employee_Database {
     private ArrayList<Employee> EmployeeDatabase;
 
+    public Employee_Database() {
+        EmployeeDatabase = new ArrayList<Employee>();
+    }
     public ArrayList<Employee> getEmployeeDatabase() {
         return EmployeeDatabase;
     }
@@ -17,4 +20,11 @@ public class Employee_Database {
 
         return info;
     }
+    public void viewAllInfo() {
+        ArrayList<Employee> ed = this.getEmployeeDatabase();
+        for (int x=0;x<ed.size();x++) {
+            System.out.println(this.viewInfo(ed.get(x)));
+        }
+    }
 }
+
