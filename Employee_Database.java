@@ -17,6 +17,12 @@ public class Employee_Database {
         info = info + "Username: " + selected.getUsername() + "\n";
         info = info + "Password: " + selected.getPassword() + "\n";
         info = info + "Position: " + selected.getPosition() + "\n";
+        if (selected.isAdmin()) {
+            info = info + "Is an admin" + "\n";
+        }
+        else {
+            info = info + "Not and admin" + "\n";
+        }
 
         return info;
     }
@@ -27,4 +33,3 @@ public class Employee_Database {
         }
     }
 }
-
