@@ -1,9 +1,16 @@
+import java.util.ArrayList;
 public class Meeting {
-    Room room;
-    Employee[] attendees;
+    private String ownerID;
+    private Room room;
+    private ArrayList<Employee> attendees;
 
     public Meeting() {
 
+    }
+
+    public Meeting(String id, Room r) {
+        ownerID = id;
+        room = r;
     }
 
     public void setRoom(Room room) {
@@ -14,13 +21,11 @@ public class Meeting {
         return room;
     }
 
-    public void invite() {
-
+    public void invite(Employee e) {
+        attendees.add(e);
     }
 
-    public Employee getAttendee() {
-        Employee e = new Employee();
+    public void getAttendee() {
 
-        return e;
     }
 }
