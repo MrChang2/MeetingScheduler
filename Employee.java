@@ -5,17 +5,22 @@ public class Employee {
     private String username;
     private String password;
     private String position;
+    private String availableStart;
+    private String availableEnd;
+    private boolean isAdmin = false;
 
     public Employee() {
 
     }
-    public Employee(String e, String f, String l, String u, String pa, String po) {
+    public Employee(String e, String f, String l, String u, String pa, String po, String as, String ae) {
         employeeID = e;
         first_name = f;
         last_name = l;
         username = u;
         password = pa;
         position = po;
+        availableStart = as;
+        availableEnd = ae;
     }
 
     public void setEmployeeID(String employeeID) {
@@ -64,5 +69,29 @@ public class Employee {
 
     public String getPosition() {
         return position;
+    }
+
+    public void setAvailableStart(String availableStart) {
+        this.availableStart = availableStart;
+    }
+
+    public String getAvailableStart() {
+        return availableStart;
+    }
+
+    public void setAvailableEnd(String availableEnd) {
+        this.availableEnd = availableEnd;
+    }
+
+    public String getAvailableEnd() {
+        return availableEnd;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
     }
 }
