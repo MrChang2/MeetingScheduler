@@ -1,3 +1,4 @@
+import java.util.Scanner;
 public class Employee {
     private String employeeID;
     private String first_name;
@@ -93,5 +94,72 @@ public class Employee {
 
     public boolean isAdmin() {
         return isAdmin;
+    }
+
+    //Allows Employee to create meeting, adding it to the meeting database and selecting room from room database
+    public void createMeeting(Meeting_Database mdatabase, Room_Database rdatabase) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What would you like to name this meeting: ");
+        String meetingN = sc.next();
+        System.out.println("Enter ID of room: ");
+        String roomID = sc.next();
+        for (int x=0;x<rdatabase.getRooms().size();x++) {
+            if (roomID.equals(rdatabase.getRooms().get(x).getRoomID())) {
+                if (!rdatabase.getRooms().get(x).isOccupied()) {
+                    Meeting newMeeting = new Meeting(meetingN, this.getEmployeeID(), rdatabase.getRooms().get(x));
+                    mdatabase.getMeetingDatabase().add(newMeeting);
+                    rdatabase.getRooms().get(x).setOccupied(true);
+                }
+                else {
+                    System.out.println("Room is taken.");
+                }
+                break;
+            }
+            if (x==rdatabase.getRooms().size()-1) {
+                System.out.println("Room does not exist.");
+            }
+        }
+    }
+    //Allows employee to invite other employees to meeting
+    public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) {
+        Scanner sc = new Scanner(System.in);
+        Employee invitedE = null;
+        System.out.println("What is the name of the meeting: ");
+        String meetingN = sc.next();
+        System.out.println("What is the username of the Employee you would like to invite: ");
+        String employeeUsername = sc.next();
+        for (int x=0;x<employees.getEmployeeDatabase().size();x++) {
+            if (employeeUsername.equals(employees.getEmployeeDatabase().get(x).getUsername())) {
+                invitedE = employees.getEmployeeDatabase().get(x);
+            }
+        }
+        if (invitedE!=null) {
+            this.inviteEmployee(meetings, meetingN, invitedE);
+        }
+        else {
+            System.out.println("Username is not registered.");
+        }
+    }
+    public void inviteEmployee(Meeting_Database meetings, String meetingN, Employee e) {
+        for (int x=0;x<meetings.getMeetingDatabase().size();x++) {
+            if (meetings.getMeetingDatabase().get(x).getMeetingName().equals(meetingN)) {
+                if (meetings.getMeetingDatabase().get(x).getOwnerID().equals(this.getEmployeeID())) {
+                    if (!meetings.getMeetingDatabase().get(x).getAttendees().contains(e)) {
+                        meetings.getMeetingDatabase().get(x).invite(e);
+                        System.out.println(e.getUsername() + " has been invited to " + meetingN + "!");
+                    }
+                    else {
+                        System.out.println(e.getUsername() + " has already been invited.");
+                    }
+                }
+                else {
+                    System.out.println("You are not the owner of this room;");
+                }
+                break;
+            }
+            if (x==meetings.getMeetingDatabase().size()-1) {
+                System.out.println("Meeting does not exist. Create a meeting if you want to invite someone.");
+            }
+        }
     }
 }
