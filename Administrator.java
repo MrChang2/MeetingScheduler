@@ -1,18 +1,30 @@
 import java.util.ArrayList;
-public class Administrator {
+public class Administrator extends Employee{
     private Employee_Database employeeDatabase;
     private Room_Database roomDatabase;
-    public Administrator(Employee_Database d, Room_Database r) {
-        employeeDatabase = d;
-        roomDatabase = r;
+    public Administrator(String e, String f, String l, String u, String pa, String po, String as, String ae) {
+        super(e, f, l, u, pa, po, as, ae);
+        this.setAdmin(true);
+    }
+    public Administrator(Employee e) {
+        super(e.getEmployeeID(), e.getFirst_name(), e.getLast_name(), e.getUsername(), e.getPassword(), e.getPosition(), e.getAvailableStart(), e.getAvailableEnd());
+        this.setAdmin(true);
     }
 
     public Employee_Database getEmployeeDatabase() {
         return employeeDatabase;
     }
 
+    public void setEmployeeDatabase(Employee_Database employeeDatabase) {
+        this.employeeDatabase = employeeDatabase;
+    }
+
     public Room_Database getRoomDatabase() {
         return roomDatabase;
+    }
+
+    public void setRoomDatabase(Room_Database roomDatabase) {
+        this.roomDatabase = roomDatabase;
     }
 
     public void addEmployee(Employee e) {
@@ -40,5 +52,13 @@ public class Administrator {
     }
     public void viewAllRoomInfo() {
         roomDatabase.viewAllRooms();
+    }
+    //Allows administrator to give another employee administrator privileges
+    public void makeAdmin(String id) {
+        for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
+            if (employeeDatabase.getEmployeeDatabase().get(x).getEmployeeID().equals(id)) {
+                employeeDatabase.getEmployeeDatabase().set(x, new Administrator(employeeDatabase.getEmployeeDatabase().get(x)));
+            }
+        }
     }
 }
