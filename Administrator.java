@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Administrator extends Employee{
     private Employee_Database employeeDatabase;
     private Room_Database roomDatabase;
@@ -27,20 +28,76 @@ public class Administrator extends Employee{
         this.roomDatabase = roomDatabase;
     }
 
-    public void addEmployee(Employee e) {
-        employeeDatabase.getEmployeeDatabase().add(e);
+    //Admins can add new Employees to database
+    public void addEmployee() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the username of the new Employee: ");
+        String username = sc.next();
+        System.out.println("Set the password for the new user: ");
+        String password = sc.next();
+        Employee newEmployee = new Employee(username, password);
+        //Check to see if username already exists
+        for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
+            if (employeeDatabase.getEmployeeDatabase().get(x).getUsername().equals(username)) {
+                System.out.println(username + " already exists.");
+                break;
+            }
+            if (x==employeeDatabase.getEmployeeDatabase().size()-1) {
+                employeeDatabase.getEmployeeDatabase().add(newEmployee);
+                System.out.println(username + " has been added to the database.");
+            }
+        }
     }
-    public void deleteEmployee(Employee e) {
-        employeeDatabase.getEmployeeDatabase().remove(e);
+    //Admins can delete Employees
+    public void deleteEmployee() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the username of the Employee to delete: ");
+        String username = sc.next();
+        //Searches for Employee and removes it
+        for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
+            if (employeeDatabase.getEmployeeDatabase().get(x).getUsername().equals(username)) {
+                employeeDatabase.getEmployeeDatabase().remove(x);
+                System.out.println(username + " has been removed.");
+                break;
+            }
+            if (x==employeeDatabase.getEmployeeDatabase().size()-1) {
+                System.out.println("Employee does not exist.");
+            }
+        }
     }
     public void updateEmployee() {
 
     }
-    public void addRoom(Room r) {
-        roomDatabase.getRooms().add(r);
+    public void addRoom() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the number for the room: ");
+        String roomID = sc.next();
+        Room room = new Room(roomID);
+        for (int x=0;x<roomDatabase.getRooms().size();x++) {
+            if (roomDatabase.getRooms().get(x).getRoomID().equals(roomID)) {
+                System.out.println("Room already exists.");
+                break;
+            }
+            if (x==roomDatabase.getRooms().size()-1) {
+                roomDatabase.getRooms().add(room);
+                System.out.println("Added new room " + roomID);
+            }
+        }
     }
-    public void deleteRoom(Room r) {
-        roomDatabase.getRooms().remove(r);
+    public void deleteRoom() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the number for the room to remove: ");
+        String roomID = sc.next();
+        for (int x=0;x<roomDatabase.getRooms().size();x++) {
+            if (roomDatabase.getRooms().get(x).getRoomID().equals(roomID)) {
+                roomDatabase.getRooms().remove(x);
+                System.out.println("Removed room " + roomID);
+                break;
+            }
+            if (x==roomDatabase.getRooms().size()-1) {
+                System.out.println("Room does not exist.");
+            }
+        }
     }
     public Employee getEmployee(Employee e) {
         ArrayList<Employee> database = employeeDatabase.getEmployeeDatabase();
