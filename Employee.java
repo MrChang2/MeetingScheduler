@@ -16,17 +16,16 @@ public class Employee {
     public Employee() {
 
     }
-    public Employee(String e, String f, String l, String u, String pa, String po, String as, String ae) {
-        employeeID = e;
-        first_name = f;
-        last_name = l;
-        username = u;
-        password = pa;
-        position = po;
-        availableStart = as;
-        availableEnd = ae;
+   public Employee(String id, String first, String last, String user, String pass, String pos, String start, String end) {
+        employeeID = id;
+        first_name = first;
+        last_name = last;
+        username = user;
+        password = pass;
+        position = pos;
+        availableStart = start;
+        availableEnd = end;
     }
-
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
