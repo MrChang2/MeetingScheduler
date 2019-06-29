@@ -65,6 +65,14 @@ public class Employee {
     public String getPassword() {
         return password;
     }
+    
+     public void changePassword() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your new password: ");
+        String password = sc.next();
+        this.setPassword(password);
+        System.out.println("Password successfully changed.");
+    }
 
     public void setPosition(String position) {
         this.position = position;
