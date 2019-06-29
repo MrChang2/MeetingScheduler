@@ -217,4 +217,74 @@ public class Employee {
             }
         }
     }
+    
+    public void changeMeetingRoom(Room_Database rooms, Meeting_Database meetings, Notification_Database notifications) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What meeting do you want to modify: ");
+        String meetingName = sc.next();
+        System.out.println("What room do you want to move to(Enter room ID): ");
+        String roomID = sc.next();
+        for (int x=0;x<meetings.getMeetingDatabase().size();x++) {
+            //if meeting is found
+            if (meetings.getMeetingDatabase().get(x).getMeetingName().equals(meetingName)) {
+                //if user owns the meeting
+                if (meetings.getMeetingDatabase().get(x).getOwnerID().equals(this.getEmployeeID())) {
+                    for (int y=0;y<rooms.getRooms().size();y++) {
+                        //if room exists
+                        if (rooms.getRooms().get(y).getRoomID().equals(roomID)) {
+                            //set new room to meeting
+                            meetings.getMeetingDatabase().get(x).setRoom(rooms.getRooms().get(y));
+                            //notify all attendees
+                            String message = meetings.getMeetingDatabase().get(x).getMeetingName() + " has been moved to room " + rooms.getRooms().get(y).getRoomID();
+                            Notification roomMoved;
+                            for (int z=0;z<meetings.getMeetingDatabase().get(x).getAttendees().size();z++) {
+                                roomMoved = new Notification(meetings.getMeetingDatabase().get(x).getAttendees().get(z).getEmployeeID(), message);
+                                notifications.getNotificationDatabase().add(roomMoved);
+                            }
+                            break;
+                        }
+                        if (y==rooms.getRooms().size()-1) {
+                            System.out.println("Room does not exist.");
+                        }
+                    }
+                }
+                else {
+                    System.out.println("You do not own this meeting.");
+                }
+                break;
+            }
+        }
+    }
+
+    public void cancelMeeting(Meeting_Database meetings, Notification_Database notifications) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the name of the meeting you want to cancel:");
+        String meetingName = sc.next();
+        for (int x=0;x<meetings.getMeetingDatabase().size();x++) {
+            //when meeting is found
+            if (meetings.getMeetingDatabase().get(x).getMeetingName().equals(meetingName)) {
+                //if user is owner
+                if (meetings.getMeetingDatabase().get(x).getOwnerID().equals(this.getEmployeeID())) {
+                    //notification message
+                    String meetingCancelled = meetings.getMeetingDatabase().get(x).getMeetingName() + " has been cancelled.";
+                    Notification cancellation;
+                    //notify all attendees of cancellation
+                    for (int y=0;y<meetings.getMeetingDatabase().get(x).getAttendees().size();y++) {
+                        cancellation = new Notification(meetings.getMeetingDatabase().get(x).getAttendees().get(y).getEmployeeID(), meetingCancelled);
+                        notifications.getNotificationDatabase().add(cancellation);
+                    }
+                    //remove the meeting
+                    meetings.getMeetingDatabase().remove(meetings.getMeetingDatabase().get(x));
+                }
+                //else nothing happens
+                else {
+                    System.out.println("You are not the owner of this meeting.");
+                }
+                break;
+            }
+            if (x==meetings.getMeetingDatabase().size()-1) {
+                System.out.println("Meeting does not exist.");
+            }
+        }
+    }
 }
