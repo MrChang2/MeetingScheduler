@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import database.EmployeeDB;
+
 public class Employee {
     private String employeeID;
     private String first_name;
@@ -9,6 +11,7 @@ public class Employee {
     private String availableStart;
     private String availableEnd;
     private boolean isAdmin = false;
+    private EmployeeDB database;
 
     public Employee() {
 
@@ -96,7 +99,12 @@ public class Employee {
         return isAdmin;
     }
 
+    public void connectDB() throws Exception{
+        database = new EmployeeDB();
+    }
+
     //Allows Employee to create meeting, adding it to the meeting database and selecting room from room database
+    /*
     public void createMeeting(Meeting_Database mdatabase, Room_Database rdatabase) {
         Scanner sc = new Scanner(System.in);
         System.out.println("What would you like to name this meeting: ");
@@ -120,6 +128,8 @@ public class Employee {
             }
         }
     }
+    */
+
     //Allows employee to invite other employees to meeting
     public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) {
         Scanner sc = new Scanner(System.in);
