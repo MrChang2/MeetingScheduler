@@ -171,4 +171,50 @@ public class Employee {
             }
         }
     }
+    
+    //Allows owners to uninvite an attendee
+    public void uninviteEmployee(Employee_Database employees, Meeting_Database meetings, Notification_Database notifications) {
+        Scanner sc = new Scanner(System.in);
+        Employee uninvitedEmp = null;
+        System.out.println("Name the meeting you wish to access: ");
+        String meetingName = sc.next();
+        System.out.println("What is the username of the Employee you would like to uninvite: ");
+        String employeeUsername = sc.next();
+        for (int x=0;x<employees.getEmployeeDatabase().size();x++) {
+            if (employeeUsername.equals(employees.getEmployeeDatabase().get(x).getUsername())) {
+                uninvitedEmp = employees.getEmployeeDatabase().get(x);
+            }
+        }
+        if (uninvitedEmp!=null) {
+            this.uninviteEmployee(meetings, notifications, meetingName, uninvitedEmp);
+        }
+        else {
+            System.out.println("Username is not registered.");
+        }
+    }
+    public void uninviteEmployee(Meeting_Database meetings, Notification_Database notifications, String meetingName, Employee emp) {
+        for (int x=0;x<meetings.getMeetingDatabase().size();x++) {      //Iterate through Meeting Database
+            if (meetings.getMeetingDatabase().get(x).getMeetingName().equals(meetingName)) {    //Once meeting is found
+                if (meetings.getMeetingDatabase().get(x).getOwnerID().equals(this.getEmployeeID())) {   //if user owns the meeting
+                    if (meetings.getMeetingDatabase().get(x).getAttendees().contains(emp)) {    //if employee has already been invited
+                        meetings.getMeetingDatabase().get(x).getAttendees().remove(emp);        //remove the employee from the attendee list
+                        String message = emp.getUsername() + " has been removed from " + meetings.getMeetingDatabase().get(x).getMeetingName() + ".";
+                        Notification disinvitation;
+                        //Notify all remaining attendees of the disinvitation
+                        for (int y=0;y<meetings.getMeetingDatabase().get(x).getAttendees().size();y++) {
+                            disinvitation = new Notification(meetings.getMeetingDatabase().get(x).getAttendees().get(y).getEmployeeID(), message);
+                            notifications.getNotificationDatabase().add(disinvitation);
+                        }
+                    }
+                    else {
+                        System.out.println(emp.getUsername() + " has not been invited to this meeting.");
+                    }
+                }
+                else {
+                   System.out.println("You are not the owner of this meeting.");
+                }
+                break;
+            }
+        }
+    }
 }
