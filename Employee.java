@@ -42,6 +42,7 @@ public class Employee {
         return first_name;
     }
     
+    //***************GUI BUTTON*************************
      public void changeFirst_name() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your first name: ");
@@ -58,6 +59,7 @@ public class Employee {
         return last_name;
     }
     
+    //***************GUI BUTTON*************************
     public void changeLast_name() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your last name: ");
@@ -82,6 +84,7 @@ public class Employee {
         return password;
     }
     
+    //***************GUI BUTTON*************************
      public void changePassword() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your new password: ");
@@ -98,6 +101,7 @@ public class Employee {
         return position;
     }
     
+    //***************GUI BUTTON*************************
     public void changePosition() {
         Scanner sc = new Scanner(System.in);
         System.out.println("State your position: ");
@@ -134,6 +138,7 @@ public class Employee {
         database = new EmployeeDB();
     }
 
+    //***************GUI BUTTON*************************
     //Allows Employee to create meeting, adding it to the meeting database and selecting room from room database
     /*
     public void createMeeting(Meeting_Database mdatabase, Room_Database rdatabase) {
@@ -161,6 +166,7 @@ public class Employee {
     }
     */
 
+    //***************GUI BUTTON*************************
     //Allows employee to invite other employees to meeting
     public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) {
         Scanner sc = new Scanner(System.in);
@@ -204,6 +210,7 @@ public class Employee {
         }
     }
     
+    //***************GUI BUTTON*************************
     //Allows owners to uninvite an attendee
     public void uninviteEmployee(Employee_Database employees, Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
@@ -250,6 +257,7 @@ public class Employee {
         }
     }
     
+    //***************GUI BUTTON*************************
     public void changeMeetingRoom(Room_Database rooms, Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
         System.out.println("What meeting do you want to modify: ");
@@ -288,6 +296,7 @@ public class Employee {
         }
     }
 
+    //***************GUI BUTTON*************************
     public void cancelMeeting(Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the name of the meeting you want to cancel:");
