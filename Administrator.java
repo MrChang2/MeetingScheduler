@@ -28,6 +28,7 @@ public class Administrator extends Employee{
         this.roomDatabase = roomDatabase;
     }
 
+    //***************GUI BUTTON*************************
     //Admins can add new Employees to database
     public void addEmployee() {
         Scanner sc = new Scanner(System.in);
@@ -48,6 +49,8 @@ public class Administrator extends Employee{
             }
         }
     }
+    
+    //***************GUI BUTTON*************************
     //Admins can delete Employees
     public void deleteEmployee() {
         Scanner sc = new Scanner(System.in);
@@ -68,6 +71,8 @@ public class Administrator extends Employee{
     public void updateEmployee() {
 
     }
+    
+    //***************GUI BUTTON*************************
     public void addRoom() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number for the room: ");
@@ -84,6 +89,8 @@ public class Administrator extends Employee{
             }
         }
     }
+    
+    //***************GUI BUTTON*************************
     public void deleteRoom() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number for the room to remove: ");
@@ -119,6 +126,7 @@ public class Administrator extends Employee{
         }
     }
     
+    //***************GUI BUTTON*************************
     public void resetEmployeePassword() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the ID of the Employee: ");
