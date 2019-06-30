@@ -118,4 +118,22 @@ public class Administrator extends Employee{
             }
         }
     }
+    
+    public void resetEmployeePassword() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the ID of the Employee: ");
+        String employeeID = sc.next();
+        for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
+            if (employeeDatabase.getEmployeeDatabase().get(x).getEmployeeID().equals(employeeID)) {
+                System.out.println("Enter new password: ");
+                String password = sc.next();
+                employeeDatabase.getEmployeeDatabase().get(x).setPassword(password);
+                System.out.println("Password for " + employeeDatabase.getEmployeeDatabase().get(x).getUsername() + " has been changed.");
+                break;
+            }
+            if (x==employeeDatabase.getEmployeeDatabase().size()-1) {
+                System.out.println("Invalid ID.");
+            }
+        }
+    }
 }
