@@ -41,6 +41,14 @@ public class Employee {
     public String getFirst_name() {
         return first_name;
     }
+    
+     public void changeFirst_name() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your first name: ");
+        String firstName = sc.next();
+        this.setFirst_name(firstName);
+        System.out.println("First name successfully changed.");
+    }
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
@@ -48,6 +56,14 @@ public class Employee {
 
     public String getLast_name() {
         return last_name;
+    }
+    
+    public void changeLast_name() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your last name: ");
+        String lastName = sc.next();
+        this.setLast_name(lastName);
+        System.out.println("Last name successfully changed.");
     }
 
     public void setUsername(String username) {
@@ -80,6 +96,14 @@ public class Employee {
 
     public String getPosition() {
         return position;
+    }
+    
+    public void changePosition() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("State your position: ");
+        String position = sc.next();
+        this.setPosition(position);
+        System.out.println("Position successfully changed.");
     }
 
     public void setAvailableStart(String availableStart) {
