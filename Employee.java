@@ -2,30 +2,33 @@ import java.util.Scanner;
 import database.EmployeeDB;
 
 public class Employee {
-    private String employeeID;
+   private String employeeID;
     private String first_name;
     private String last_name;
     private String username;
     private String password;
     private String position;
-    private String availableStart;
-    private String availableEnd;
+    private WorkHours availability;
     private boolean isAdmin = false;
-    private EmployeeDB database;
 
     public Employee() {
 
     }
-   public Employee(String id, String first, String last, String user, String pass, String pos, String start, String end) {
+    public Employee(String user, String pass) {
+        username = user;
+        password = pass;
+    }
+    public Employee(String id, String first, String last, String user, String pass, String pos, WorkHours_Database wh) {
         employeeID = id;
         first_name = first;
         last_name = last;
         username = user;
         password = pass;
         position = pos;
-        availableStart = start;
-        availableEnd = end;
+        availability = new WorkHours(id);
+        wh.getWorkHoursDatabase().add(availability);
     }
+    
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
@@ -327,5 +330,31 @@ public class Employee {
                 System.out.println("Meeting does not exist.");
             }
         }
+    }
+    
+     //***************GUI BUTTON*************************
+    //Allows Employees to alter their work hours
+    public void changeWorkingHours(WorkHours_Database wh) {
+        Scanner sc = new Scanner(System.in);
+        int input = 9;
+        while (input!=6 && input!=7 && input!=8) {
+            availability.printWorkHours();
+            System.out.println("Enter the hour you wish to alter. Or enter 6, 7, or 8 to exit.");
+            input = sc.nextInt();
+            if (input<=12 && input>8) {
+                availability.toggleAvailability(input-9);
+            }
+            else if (input<=5 && input>0){
+                availability.toggleAvailability(input+3);
+            }
+        }
+        wh.updateWorkHours(availability);
+        System.out.println("Hours have been changed.");
+    }
+
+    //***************GUI BUTTON*************************
+    //Allows Employees to check their schedules.
+    public void checkWorkingHours() {
+        availability.printWorkHours();
     }
 }
