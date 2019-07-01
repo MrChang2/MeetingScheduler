@@ -3,12 +3,8 @@ import java.util.Scanner;
 public class Administrator extends Employee{
     private Employee_Database employeeDatabase;
     private Room_Database roomDatabase;
-    public Administrator(String e, String f, String l, String u, String pa, String po, String as, String ae) {
-        super(e, f, l, u, pa, po, as, ae);
-        this.setAdmin(true);
-    }
-    public Administrator(Employee e) {
-        super(e.getEmployeeID(), e.getFirst_name(), e.getLast_name(), e.getUsername(), e.getPassword(), e.getPosition(), e.getAvailableStart(), e.getAvailableEnd());
+    public Administrator(String e, String f, String l, String u, String pa, String po, WorkHours_Database wh) {
+        super(e, f, l, u, pa, po, wh);
         this.setAdmin(true);
     }
 
@@ -28,6 +24,7 @@ public class Administrator extends Employee{
         this.roomDatabase = roomDatabase;
     }
 
+    //***************GUI BUTTON*************************
     //Admins can add new Employees to database
     public void addEmployee() {
         Scanner sc = new Scanner(System.in);
@@ -48,6 +45,8 @@ public class Administrator extends Employee{
             }
         }
     }
+    
+    //***************GUI BUTTON*************************
     //Admins can delete Employees
     public void deleteEmployee() {
         Scanner sc = new Scanner(System.in);
@@ -68,6 +67,8 @@ public class Administrator extends Employee{
     public void updateEmployee() {
 
     }
+    
+    //***************GUI BUTTON*************************
     public void addRoom() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number for the room: ");
@@ -84,6 +85,8 @@ public class Administrator extends Employee{
             }
         }
     }
+    
+    //***************GUI BUTTON*************************
     public void deleteRoom() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number for the room to remove: ");
@@ -114,7 +117,26 @@ public class Administrator extends Employee{
     public void makeAdmin(String id) {
         for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
             if (employeeDatabase.getEmployeeDatabase().get(x).getEmployeeID().equals(id)) {
-                employeeDatabase.getEmployeeDatabase().set(x, new Administrator(employeeDatabase.getEmployeeDatabase().get(x)));
+                //employeeDatabase.getEmployeeDatabase().set(x, new Administrator(employeeDatabase.getEmployeeDatabase().get(x)));
+            }
+        }
+    }
+    
+    //***************GUI BUTTON*************************
+    public void resetEmployeePassword() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the ID of the Employee: ");
+        String employeeID = sc.next();
+        for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
+            if (employeeDatabase.getEmployeeDatabase().get(x).getEmployeeID().equals(employeeID)) {
+                System.out.println("Enter new password: ");
+                String password = sc.next();
+                employeeDatabase.getEmployeeDatabase().get(x).setPassword(password);
+                System.out.println("Password for " + employeeDatabase.getEmployeeDatabase().get(x).getUsername() + " has been changed.");
+                break;
+            }
+            if (x==employeeDatabase.getEmployeeDatabase().size()-1) {
+                System.out.println("Invalid ID.");
             }
         }
     }

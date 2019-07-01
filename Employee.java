@@ -6,35 +6,56 @@ import java.time.LocalDateTime;
 import database.*;
 
 public class Employee {
-    private String employeeID;
+   private String employeeID;
     private String first_name;
     private String last_name;
     private String username;
     private String password;
     private String position;
-    private String availableStart;
-    private String availableEnd;
+    private WorkHours availability;
     private boolean isAdmin = false;
+<<<<<<< HEAD
     private EmployeeDB employeeDB;
     private LoginDB loginDB;
     private ScheduleDB scheduleDB;
     private MeetingDB meetingDB;
     private RoomDB roomDB;
+=======
+
+    public Employee() {
+>>>>>>> 7e96043f4ed65bf13ec4c5bf5696262c28206f71
 
     public Employee(){
     }
+<<<<<<< HEAD
    public Employee(String id, String first, String last, String user, String pass, String pos, String start, String end) throws Exception{
+=======
+    public Employee(String user, String pass) {
+        username = user;
+        password = pass;
+    }
+    public Employee(String id, String first, String last, String user, String pass, String pos, WorkHours_Database wh) {
+>>>>>>> 7e96043f4ed65bf13ec4c5bf5696262c28206f71
         employeeID = id;
         first_name = first;
         last_name = last;
         username = user;
         password = pass;
         position = pos;
+<<<<<<< HEAD
         availableStart = start;
         availableEnd = end;
         saveToDB();
         meetingDB = new MeetingDB();
         roomDB = new RoomDB();
+=======
+        availability = new WorkHours(id);
+        wh.getWorkHoursDatabase().add(availability);
+    }
+    
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+>>>>>>> 7e96043f4ed65bf13ec4c5bf5696262c28206f71
     }
 
     public String getEmployeeID() {
@@ -49,6 +70,15 @@ public class Employee {
     public String getFirst_name() {
         return first_name;
     }
+    
+    //***************GUI BUTTON*************************
+     public void changeFirst_name() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your first name: ");
+        String firstName = sc.next();
+        this.setFirst_name(firstName);
+        System.out.println("First name successfully changed.");
+    }
 
     public void setLast_name(String last_name) throws Exception {
         this.last_name = last_name;
@@ -57,6 +87,15 @@ public class Employee {
 
     public String getLast_name() {
         return last_name;
+    }
+    
+    //***************GUI BUTTON*************************
+    public void changeLast_name() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your last name: ");
+        String lastName = sc.next();
+        this.setLast_name(lastName);
+        System.out.println("Last name successfully changed.");
     }
 
     public void setUsername(String username) throws Exception {
@@ -76,7 +115,12 @@ public class Employee {
         return password;
     }
     
+<<<<<<< HEAD
      public void changePassword() throws Exception{
+=======
+    //***************GUI BUTTON*************************
+     public void changePassword() {
+>>>>>>> 7e96043f4ed65bf13ec4c5bf5696262c28206f71
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your new password: ");
         String password = sc.next();
@@ -91,6 +135,15 @@ public class Employee {
 
     public String getPosition() {
         return position;
+    }
+    
+    //***************GUI BUTTON*************************
+    public void changePosition() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("State your position: ");
+        String position = sc.next();
+        this.setPosition(position);
+        System.out.println("Position successfully changed.");
     }
 
     public void setAvailableStart(String availableStart) throws Exception{
@@ -160,6 +213,7 @@ public class Employee {
         return LocalDateTime.now().toString();
     }
 
+    //***************GUI BUTTON*************************
     //Allows Employee to create meeting, adding it to the meeting database and selecting room from room database
     public void createMeeting() throws Exception{
        ArrayList<String> emptyRooms = roomDB.getAvailable();
@@ -179,6 +233,7 @@ public class Employee {
         */
     }
 
+    //***************GUI BUTTON*************************
     //Allows employee to invite other employees to meeting
     public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) throws Exception{
         HashMap<String, String> allEmployees = employeeDB.getAll();
@@ -219,6 +274,7 @@ public class Employee {
         }
     }
     
+    //***************GUI BUTTON*************************
     //Allows owners to uninvite an attendee
     public void uninviteEmployee(Employee_Database employees, Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
@@ -265,6 +321,7 @@ public class Employee {
         }
     }
     
+    //***************GUI BUTTON*************************
     public void changeMeetingRoom(Room_Database rooms, Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
         System.out.println("What meeting do you want to modify: ");
@@ -303,6 +360,7 @@ public class Employee {
         }
     }
 
+    //***************GUI BUTTON*************************
     public void cancelMeeting(Meeting_Database meetings, Notification_Database notifications) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the name of the meeting you want to cancel:");
@@ -333,5 +391,31 @@ public class Employee {
                 System.out.println("Meeting does not exist.");
             }
         }
+    }
+    
+     //***************GUI BUTTON*************************
+    //Allows Employees to alter their work hours
+    public void changeWorkingHours(WorkHours_Database wh) {
+        Scanner sc = new Scanner(System.in);
+        int input = 9;
+        while (input!=6 && input!=7 && input!=8) {
+            availability.printWorkHours();
+            System.out.println("Enter the hour you wish to alter. Or enter 6, 7, or 8 to exit.");
+            input = sc.nextInt();
+            if (input<=12 && input>8) {
+                availability.toggleAvailability(input-9);
+            }
+            else if (input<=5 && input>0){
+                availability.toggleAvailability(input+3);
+            }
+        }
+        wh.updateWorkHours(availability);
+        System.out.println("Hours have been changed.");
+    }
+
+    //***************GUI BUTTON*************************
+    //Allows Employees to check their schedules.
+    public void checkWorkingHours() {
+        availability.printWorkHours();
     }
 }
