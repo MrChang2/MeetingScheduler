@@ -12,20 +12,20 @@ public class ReminderDB extends Database{
         super();
     }
 
-    protected PreparedStatement createFields(Connection database) throws Exception {
-        PreparedStatement create = database.prepareStatement("CREATE TABLE IF NOT EXISTS " +
+    protected PreparedStatement createFields() throws Exception {
+        PreparedStatement create = super.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS " +
                 "reminder(reminder_id VARCHAR(10), employee_id VARCHAR(10), meeting_id VARCHAR(10), accepted TINYINT(1), PRIMARY KEY(reminder_id))");
         return create;
     }
 
-    public void insertFields(Connection database, String reminder_id, String employee_id, String meeting_id, int accepted) throws Exception{
-        PreparedStatement insert = database.prepareStatement("INSERT INTO reminder(reminder_id VARCHAR(10), employee_id VARCHAR(10), meeting_id VARCHAR(10), accepted TINYINT(1))" +
+    public void insertRecord(String reminder_id, String employee_id, String meeting_id, int accepted) throws Exception{
+        PreparedStatement insert = super.getDatabase().prepareStatement("INSERT INTO reminder(reminder_id VARCHAR(10), employee_id VARCHAR(10), meeting_id VARCHAR(10), accepted TINYINT(1))" +
                 "VALUES('"+reminder_id+"', '"+employee_id+"',''"+meeting_id+"','"+accepted+"')'");
         insert.executeUpdate();
     }
 
-    public void deleteFields(Connection database, String id) throws Exception {
-        PreparedStatement insert = database.prepareStatement("DELETE FROM reminder WHERE reminder_id=id");
+    public void deleteRecord(String id) throws Exception {
+        PreparedStatement insert = super.getDatabase().prepareStatement("DELETE FROM reminder WHERE reminder_id=id");
         insert.executeUpdate();
     }
 

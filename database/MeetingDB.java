@@ -12,21 +12,27 @@ public class MeetingDB extends Database {
         super();
     }
 
-    protected PreparedStatement createFields(Connection database) throws Exception {
-        PreparedStatement create = database.prepareStatement("CREATE TABLE IF NOT EXISTS " +
-                "meeting(meeting_id VARCHAR(10), room_id VARCHAR(10), employee_id VARCHAR(10), attending TINYINT(1), PRIMARY KEY(employee_id))");
+    protected PreparedStatement createFields() throws Exception {
+        PreparedStatement create = super.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS " +
+                "meeting(meeting_id VARCHAR(30), room_id VARCHAR(10), employee_id VARCHAR(10), attending meeting_id VARCHAR(30), PRIMARY KEY(employee_id))");
         return create;
     }
 
-    public void insertFields(Connection database, String meeting_id, String room_id, String employee_id, int attending) throws Exception{
-        PreparedStatement insert = database.prepareStatement("INSERT INTO meeting(meeting_id VARCHAR(10), room_id VARCHAR(10), employee_id VARCHAR(10)), attending TINYINT(1)" +
+    public void insertRecord(String meeting_id, String room_id, String employee_id, String attending) throws Exception{
+        PreparedStatement insert = super.getDatabase().prepareStatement("INSERT INTO meeting(meeting_id VARCHAR(30), room_id VARCHAR(10), employee_id VARCHAR(10)), attending meeting_id VARCHAR(30)" +
                 "VALUES('"+meeting_id+"', '"+room_id+"', '"+employee_id+"', '"+attending+"')");
         insert.executeUpdate();
     }
 
-    public void deleteFields(Connection database, String id) throws Exception {
-        PreparedStatement insert = database.prepareStatement("DELETE FROM meeting WHERE meeting_id=id");
+    public void deleteRecord(String id) throws Exception {
+        PreparedStatement insert = super.getDatabase().prepareStatement("DELETE FROM meeting WHERE meeting_id=id");
         insert.executeUpdate();
+    }
+
+    public void updateRecord(String field, String updateThis, String id) throws Exception{
+        String statement = String.format("UPDATE meeting SET '%s'='%s' WHERE employee_id='%s'", field, updateThis, id);
+        PreparedStatement update = super.getDatabase().prepareStatement(statement);
+        update.executeUpdate();
     }
 
     public ArrayList<ResultSet> getAll() throws Exception{

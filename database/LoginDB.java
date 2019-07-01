@@ -12,21 +12,27 @@ public class LoginDB extends Database {
         super();
     }
 
-    protected PreparedStatement createFields(Connection database) throws Exception {
-        PreparedStatement create = database.prepareStatement("CREATE TABLE IF NOT EXISTS " +
-                "login(employee_id VARCHAR(10), user VARCHAR(50), pass VARCHAR(50), PRIMARY KEY(employee_id))");
+    protected PreparedStatement createFields() throws Exception {
+        PreparedStatement create = super.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS " +
+                "login(employee_id VARCHAR(10), username VARCHAR(50), pass VARCHAR(50), PRIMARY KEY(employee_id))");
         return create;
     }
 
-    public void insertFields(Connection database, String user, String pass) throws Exception{
-        PreparedStatement insert = database.prepareStatement("INSERT INTO login(employee_id VARCHAR(10), user VARCHAR(50), pass VARCHAR(50)) " +
-                "VALUES('"+user+"', '"+pass+"')");
+    public void insertRecord(String id, String user, String pass) throws Exception{
+        PreparedStatement insert = super.getDatabase().prepareStatement("INSERT INTO login(employee_id VARCHAR(10), username VARCHAR(50), pass VARCHAR(50)) " +
+                "VALUES('"+id+"', '"+user+"', '"+pass+"')");
         insert.executeUpdate();
     }
 
-    public void deleteFields(Connection database, String id) throws Exception {
-        PreparedStatement insert = database.prepareStatement("DELETE FROM login WHERE employee_id=id");
+    public void deleteRecord(String id) throws Exception {
+        PreparedStatement insert = super.getDatabase().prepareStatement("DELETE FROM login WHERE employee_id=id");
         insert.executeUpdate();
+    }
+
+    public void updateRecord(String field, String updateThis, String id) throws Exception{
+        String statement = String.format("UPDATE login SET '%s'='%s' WHERE employee_id='%s'", field, updateThis, id);
+        PreparedStatement update = super.getDatabase().prepareStatement(statement);
+        update.executeUpdate();
     }
 
     public ArrayList<ResultSet> getAll() throws Exception{

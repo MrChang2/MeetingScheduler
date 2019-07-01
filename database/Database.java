@@ -9,7 +9,7 @@ abstract public class Database{
 
     public Database() throws Exception{
         database = connect();
-        createTable(database);
+        createTable();
     }
 
     public Connection connect() throws Exception{
@@ -24,13 +24,13 @@ abstract public class Database{
         return connected;
     }
 
-    public void createTable(Connection database) throws Exception {
-        PreparedStatement table = createFields(database);
+    public void createTable() throws Exception {
+        PreparedStatement table = createFields();
         table.executeUpdate();
     }
 
     public Connection getDatabase(){return database;}
 
-    protected abstract PreparedStatement createFields(Connection database) throws Exception;
+    protected abstract PreparedStatement createFields() throws Exception;
 
 }

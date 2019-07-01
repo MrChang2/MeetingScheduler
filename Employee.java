@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
-import database.EmployeeDB;
+import java.time.LocalDateTime;
+
+import database.*;
 
 public class Employee {
     private String employeeID;
@@ -11,12 +15,15 @@ public class Employee {
     private String availableStart;
     private String availableEnd;
     private boolean isAdmin = false;
-    private EmployeeDB database;
+    private EmployeeDB employeeDB;
+    private LoginDB loginDB;
+    private ScheduleDB scheduleDB;
+    private MeetingDB meetingDB;
+    private RoomDB roomDB;
 
-    public Employee() {
-
+    public Employee(){
     }
-   public Employee(String id, String first, String last, String user, String pass, String pos, String start, String end) {
+   public Employee(String id, String first, String last, String user, String pass, String pos, String start, String end) throws Exception{
         employeeID = id;
         first_name = first;
         last_name = last;
@@ -25,32 +32,34 @@ public class Employee {
         position = pos;
         availableStart = start;
         availableEnd = end;
-    }
-    public void setEmployeeID(String employeeID) {
-        this.employeeID = employeeID;
+        saveToDB();
+        meetingDB = new MeetingDB();
+        roomDB = new RoomDB();
     }
 
     public String getEmployeeID() {
         return employeeID;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirst_name(String first_name) throws Exception {
         this.first_name = first_name;
+        updateInfo("first_name", first_name);
     }
 
     public String getFirst_name() {
         return first_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLast_name(String last_name) throws Exception {
         this.last_name = last_name;
+        updateInfo("last_name", last_name);
     }
 
     public String getLast_name() {
         return last_name;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws Exception {
         this.username = username;
     }
 
@@ -58,15 +67,16 @@ public class Employee {
         return username;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) throws Exception{
         this.password = password;
+        updateLogin("pass", password);
     }
 
     public String getPassword() {
         return password;
     }
     
-     public void changePassword() {
+     public void changePassword() throws Exception{
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your new password: ");
         String password = sc.next();
@@ -74,88 +84,117 @@ public class Employee {
         System.out.println("Password successfully changed.");
     }
 
-    public void setPosition(String position) {
+    public void setPosition(String position) throws Exception{
         this.position = position;
+        updateInfo("position", position);
     }
 
     public String getPosition() {
         return position;
     }
 
-    public void setAvailableStart(String availableStart) {
+    public void setAvailableStart(String availableStart) throws Exception{
         this.availableStart = availableStart;
+        updateSchedule("start_hour", availableStart);
     }
 
     public String getAvailableStart() {
         return availableStart;
     }
 
-    public void setAvailableEnd(String availableEnd) {
+    public void setAvailableEnd(String availableEnd) throws Exception {
         this.availableEnd = availableEnd;
+        updateSchedule("end_hour", availableEnd);
     }
 
     public String getAvailableEnd() {
         return availableEnd;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(boolean admin) throws Exception {
         isAdmin = admin;
+        updateAdmin();
     }
 
     public boolean isAdmin() {
         return isAdmin;
     }
 
-    public void connectDB() throws Exception{
-        database = new EmployeeDB();
+    public void saveToDB() throws Exception{
+        saveInfo();
+        saveLogin();
+    }
+
+    public void saveInfo() throws Exception{
+        employeeDB = new EmployeeDB();
+        employeeDB.insertRecord(employeeID, first_name, last_name, position, isAdmin);
+    }
+
+    public void saveLogin() throws Exception{
+        loginDB = new LoginDB();
+        loginDB.insertRecord(employeeID, username, password);
+    }
+
+    public void saveSchedule() throws Exception{
+        scheduleDB = new ScheduleDB();
+        scheduleDB.insertRecord(employeeID, availableStart, availableEnd);
+    }
+
+    public void updateInfo(String field, String updateThis) throws Exception{
+        employeeDB.updateRecord(field, updateThis, employeeID);
+    }
+
+    public void updateAdmin() throws Exception{
+        employeeDB.updateRecord(isAdmin, employeeID);
+    }
+
+    public void updateLogin(String field, String updateThis) throws Exception{
+        loginDB.updateRecord(field, updateThis, employeeID);
+    }
+
+    public void updateSchedule(String field, String updateThis) throws Exception{
+        scheduleDB.updateRecord(field, updateThis, employeeID);
+    }
+
+    public String generateMeetingID(){
+        return LocalDateTime.now().toString();
     }
 
     //Allows Employee to create meeting, adding it to the meeting database and selecting room from room database
-    /*
-    public void createMeeting(Meeting_Database mdatabase, Room_Database rdatabase) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("What would you like to name this meeting: ");
-        String meetingN = sc.next();
-        System.out.println("Enter ID of room: ");
-        String roomID = sc.next();
-        for (int x=0;x<rdatabase.getRooms().size();x++) {
-            if (roomID.equals(rdatabase.getRooms().get(x).getRoomID())) {
-                if (!rdatabase.getRooms().get(x).isOccupied()) {
-                    Meeting newMeeting = new Meeting(meetingN, this.getEmployeeID(), rdatabase.getRooms().get(x));
-                    mdatabase.getMeetingDatabase().add(newMeeting);
-                    rdatabase.getRooms().get(x).setOccupied(true);
-                }
-                else {
-                    System.out.println("Room is taken.");
-                }
-                break;
-            }
-            if (x==rdatabase.getRooms().size()-1) {
-                System.out.println("Room does not exist.");
-            }
-        }
+    public void createMeeting() throws Exception{
+       ArrayList<String> emptyRooms = roomDB.getAvailable();
+       /*
+        ~~~~~~~~~~~~~~~ NEED MENU LISTING ALL ROOMS HERE ~~~~~~~~~~~~~~~
+        1. Display All Rooms
+        2. Store user input
+        */
+
+       String selected_room = null;
+       String meetingID = generateMeetingID();
+       meetingDB.insertRecord(meetingID, selected_room, employeeID, meetingID);
+       roomDB.updateRecord(selected_room, 1);
+
+       /*
+       ~~~~~~~~~~~~~~~ PROMPT: MENU CREATED ~~~~~~~~~~~~~~~
+        */
     }
-    */
 
     //Allows employee to invite other employees to meeting
-    public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) {
-        Scanner sc = new Scanner(System.in);
-        Employee invitedE = null;
-        System.out.println("What is the name of the meeting: ");
-        String meetingN = sc.next();
-        System.out.println("What is the username of the Employee you would like to invite: ");
-        String employeeUsername = sc.next();
-        for (int x=0;x<employees.getEmployeeDatabase().size();x++) {
-            if (employeeUsername.equals(employees.getEmployeeDatabase().get(x).getUsername())) {
-                invitedE = employees.getEmployeeDatabase().get(x);
-            }
+    public void inviteEmployee(Employee_Database employees, Meeting_Database meetings) throws Exception{
+        HashMap<String, String> allEmployees = employeeDB.getAll();
+        /*
+        ~~~~~~~~~~~~~~~ NEED MENU LISTING ALL EMPLOYEES HERE ~~~~~~~~~~~~~~~
+        1. Choose time slot (24hr format)
+        2. Display All Employees
+        3. Store user input
+        */
+        String selected_time = null;
+
+        for(int i = 0; i < allEmployees.size(); i++){
+
         }
-        if (invitedE!=null) {
-            this.inviteEmployee(meetings, meetingN, invitedE);
-        }
-        else {
-            System.out.println("Username is not registered.");
-        }
+
+
     }
     public void inviteEmployee(Meeting_Database meetings, String meetingN, Employee e) {
         for (int x=0;x<meetings.getMeetingDatabase().size();x++) {
