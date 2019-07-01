@@ -3,12 +3,8 @@ import java.util.Scanner;
 public class Administrator extends Employee{
     private Employee_Database employeeDatabase;
     private Room_Database roomDatabase;
-    public Administrator(String e, String f, String l, String u, String pa, String po, String as, String ae) {
-        super(e, f, l, u, pa, po, as, ae);
-        this.setAdmin(true);
-    }
-    public Administrator(Employee e) {
-        super(e.getEmployeeID(), e.getFirst_name(), e.getLast_name(), e.getUsername(), e.getPassword(), e.getPosition(), e.getAvailableStart(), e.getAvailableEnd());
+    public Administrator(String e, String f, String l, String u, String pa, String po, WorkHours_Database wh) {
+        super(e, f, l, u, pa, po, wh);
         this.setAdmin(true);
     }
 
@@ -121,7 +117,7 @@ public class Administrator extends Employee{
     public void makeAdmin(String id) {
         for (int x=0;x<employeeDatabase.getEmployeeDatabase().size();x++) {
             if (employeeDatabase.getEmployeeDatabase().get(x).getEmployeeID().equals(id)) {
-                employeeDatabase.getEmployeeDatabase().set(x, new Administrator(employeeDatabase.getEmployeeDatabase().get(x)));
+                //employeeDatabase.getEmployeeDatabase().set(x, new Administrator(employeeDatabase.getEmployeeDatabase().get(x)));
             }
         }
     }
