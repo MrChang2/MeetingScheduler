@@ -4,10 +4,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class RoomDB extends Database {
+    private static RoomDB roomDB;
     private int numOfFields = 2;
 
-    public RoomDB() throws Exception{
+    private RoomDB() throws Exception{
         super();
+    }
+
+    public static RoomDB getInstance() throws Exception{
+        if(roomDB == null){return new RoomDB();}
+        return roomDB;
     }
 
     protected PreparedStatement createFields() throws Exception {
@@ -44,6 +50,7 @@ public class RoomDB extends Database {
         while(retrieved.next()){
             retrievedInfo.add(retrieved.getString("room_id"));
         }
+        if(retrievedInfo.size() == 0){return null;}
         return retrievedInfo;
     }
 
@@ -55,6 +62,7 @@ public class RoomDB extends Database {
                 available.add(retrieved.getString("room_id"));
             }
         }
+        if(available.isEmpty()){return null;}
         return available;
     }
 
@@ -66,6 +74,7 @@ public class RoomDB extends Database {
         retrieved.next();
         array[0] = retrieved.getString("room_id");
         array[1] = retrieved.getString("occupied");
+        if(super.isEmpty(array)){return null;}
         return array;
     }
 }

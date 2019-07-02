@@ -1,42 +1,33 @@
-import java.util.ArrayList;
+import database.EmployeeDB;
+import database.LoginDB;
+import database.ReminderDB;
+
 import java.util.Scanner;
+
 public class Login {
-    private Employee_Database employees;
-    private Notification_Database notifications;
-    public Login(Employee_Database ed, Notification_Database n) {
-        employees = ed;
-        notifications = n;
+    private LoginDB loginDB;
+    private EmployeeDB employeeDB;
+    private ReminderDB notifications;
+
+    public Login() throws Exception{
+        loginDB = LoginDB.getInstance();
+        employeeDB = EmployeeDB.getInstance();
+        notifications = ReminderDB.getInstance();
     }
 
-    public Employee LoginCheck() {
+    public String LoginCheck() throws Exception{
         Scanner sc = new Scanner(System.in);
-        ArrayList<Employee> database = employees.getEmployeeDatabase();
         String usernameInput;
         String passwordInput;
-        Employee user = null;
+        String user = null;
 
         System.out.println("Enter username: ");
         usernameInput = sc.next();
         System.out.println("Enter password: ");
         passwordInput = sc.next();
 
-        for (int x=0;x<database.size();x++) {
-            if (usernameInput.equals(database.get(x).getUsername()) && passwordInput.equals(database.get(x).getPassword())) {
-                user = database.get(x);
-            }
-        }
-        if (user==null) {
-            System.out.println("Invalid Login Info");
-        }
-        else {
-            for (int x=0;x<notifications.getNotificationDatabase().size();x++) {
-                if (notifications.getNotificationDatabase().get(x).getEmployeeID().equals(user.getEmployeeID())) {
-                    System.out.println("New Notification: " + notifications.getNotificationDatabase().get(x).getMessage());
-                    notifications.getNotificationDatabase().remove(x);
-                    x--;
-                }
-            }
-        }
-        return user;
+        String[] credentials = loginDB.getThis(usernameInput);
+        if(credentials[1] == usernameInput && credentials[2] == passwordInput){return credentials[0];}
+        return null;
     }
 }

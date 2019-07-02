@@ -6,10 +6,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class ReminderDB extends Database{
+    private static ReminderDB reminderDB;
     private int numOfFields = 4;
 
-    public ReminderDB() throws Exception{
+    private ReminderDB() throws Exception{
         super();
+    }
+
+    public static ReminderDB getInstance() throws Exception{
+        if(reminderDB == null){return new ReminderDB();}
+        return reminderDB;
     }
 
     protected PreparedStatement createFields() throws Exception {
@@ -31,13 +37,7 @@ public class ReminderDB extends Database{
 
     public ArrayList<ResultSet> getAll() throws Exception{
         PreparedStatement retrieve = super.getDatabase().prepareStatement("SELECT * FROM reminder");
-        ResultSet retrieved = retrieve.executeQuery();
-
-        ArrayList<ResultSet> retrievedInfo = new ArrayList<ResultSet>();
-        while(retrieved.next()){
-            retrievedInfo.add(retrieved);
-        }
-        return retrievedInfo;
+        return super.getAll(retrieve);
     }
 
     public String[] getThis(String id) throws Exception{
@@ -50,6 +50,7 @@ public class ReminderDB extends Database{
         array[1] = retrieved.getString("employee_id");
         array[2] = retrieved.getString("meeting_id");
         array[3] = retrieved.getString("accepted");
+        if(super.isEmpty(array)){return null;}
         return array;
     }
 }

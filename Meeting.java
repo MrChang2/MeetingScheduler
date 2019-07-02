@@ -1,51 +1,29 @@
+import database.MeetingDB;
+
+import java.rmi.server.ExportException;
 import java.util.ArrayList;
 public class Meeting {
-    private String meetingName;
-    private String ownerID;
-    private Room room;
-    private ArrayList<Employee> attendees;
+    private MeetingDB meetingDB;
 
-    public Meeting() {
-
+    public Meeting(String meeting_id) throws Exception{
+        meetingDB = MeetingDB.getInstance();
+        getMeetingInfo(meeting_id);
     }
 
-    public Meeting(String n, String id, Room r) {
-        meetingName = n;
-        ownerID = id;
-        room = r;
-        attendees = new ArrayList<Employee>();
+    public String[] getMeetingInfo(String meeting_id) throws Exception{
+        return meetingDB.getThis(meeting_id);
     }
 
-    public String getMeetingName() {
-        return meetingName;
+    public String getOwnerID(String meeting_id) throws Exception{
+        return getMeetingInfo(meeting_id)[4];
     }
 
-    public void setMeetingName(String meetingName) {
-        this.meetingName = meetingName;
+    public String getRoom(String meeting_id) throws Exception{
+        return getMeetingInfo(meeting_id)[1];
     }
 
-    public String getOwnerID() {
-        return ownerID;
-    }
-
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void invite(Employee e) {
-        attendees.add(e);
-    }
-
-    public ArrayList<Employee> getAttendees() {
-        return attendees;
+    public ArrayList<String[]> getAttendees(String meeting_id) throws Exception{
+        return meetingDB.getAttendeesFor(meeting_id); // x[0] = id, x[1] = first_name, x[2] = last_name
     }
 }
 

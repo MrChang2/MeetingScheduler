@@ -7,10 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ScheduleDB extends Database {
+    private static ScheduleDB scheduleDB;
     private int numOfFields = 3;
 
-    public ScheduleDB() throws Exception{
+    private ScheduleDB() throws Exception{
         super();
+    }
+
+    public static ScheduleDB getInstance() throws Exception{
+        if(scheduleDB == null){return new ScheduleDB();}
+        return scheduleDB;
     }
 
     protected PreparedStatement createFields() throws Exception {
@@ -25,8 +31,8 @@ public class ScheduleDB extends Database {
         insert.executeUpdate();
     }
 
-    public void deleteRecord(Connection database, String employee_id) throws Exception {
-        PreparedStatement insert = database.prepareStatement("DELETE FROM schedule WHERE id=employee_id");
+    public void deleteRecord(String employee_id) throws Exception {
+        PreparedStatement insert = super.getDatabase().prepareStatement("DELETE FROM schedule WHERE id=employee_id");
         insert.executeUpdate();
     }
 
@@ -48,6 +54,7 @@ public class ScheduleDB extends Database {
             times[1] = retrieved.getString("end_hour");
             retrievedInfo.put(retrieved.getString("employee_id"), times);
         }
+        if(retrievedInfo.isEmpty()){return null;}
         return retrievedInfo;
     }
 
@@ -60,6 +67,8 @@ public class ScheduleDB extends Database {
         array[0] = retrieved.getString("employee_id");
         array[1] = retrieved.getString("start_hour");
         array[2] = retrieved.getString("end_hour");
+
+        if(super.isEmpty(array)){return null;}
         return array;
     }
 }

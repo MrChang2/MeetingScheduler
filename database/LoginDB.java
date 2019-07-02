@@ -6,15 +6,21 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class LoginDB extends Database {
+    private static LoginDB loginDB;
     private int numOfFields = 3;
 
-    public LoginDB() throws Exception{
+    private LoginDB() throws Exception{
         super();
+    }
+
+    public static LoginDB getInstance() throws Exception{
+        if(loginDB == null){return new LoginDB();}
+        return loginDB;
     }
 
     protected PreparedStatement createFields() throws Exception {
         PreparedStatement create = super.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS " +
-                "login(employee_id VARCHAR(10), username VARCHAR(50), pass VARCHAR(50), PRIMARY KEY(employee_id))");
+                "login(employee_id VARCHAR(10), username VARCHAR(50), pass VARCHAR(50), PRIMARY KEY(username))");
         return create;
     }
 
@@ -37,17 +43,11 @@ public class LoginDB extends Database {
 
     public ArrayList<ResultSet> getAll() throws Exception{
         PreparedStatement retrieve = super.getDatabase().prepareStatement("SELECT * FROM login");
-        ResultSet retrieved = retrieve.executeQuery();
-
-        ArrayList<ResultSet> retrievedInfo = new ArrayList<ResultSet>();
-        while(retrieved.next()){
-            retrievedInfo.add(retrieved);
-        }
-        return retrievedInfo;
+        return super.getAll(retrieve);
     }
 
     public String[] getThis(String id) throws Exception{
-        PreparedStatement retrieve = super.getDatabase().prepareStatement("SELECT * FROM login WHERE employee_id=id");
+        PreparedStatement retrieve = super.getDatabase().prepareStatement("SELECT * FROM login WHERE username=id");
         ResultSet retrieved = retrieve.executeQuery();
         String[] array = new String[numOfFields];
 
@@ -55,6 +55,7 @@ public class LoginDB extends Database {
         array[0] = retrieved.getString("id");
         array[1] = retrieved.getString("user");
         array[2] = retrieved.getString("pass");
+        if(super.isEmpty(array)){return null;}
         return array;
     }
 }
